@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minesweeper</title>
+    <style type="text/css">
+        body {
+            background: rgb(46, 46, 46);
+        }
+        #root {
+            display: inline-grid;
+            font-size: 20px;
+        }
+        span {
+            text-decoration: none;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="module">
+        import init, {startGame, openField, toggleFlag} from "./pkg/minesweeper.js";
+
+        function render(state) {
+
+           const root = document.getElementById("root"); 
+           // get each individual field
+           const data = state.split("\n").map((row) => row.trim().split(/\s+/));
+           // make them clickable
+           const ms = data.map((row, y) => row.map((val, x) => `<span data-x="${x}" data-y="${y}">${val}</span>`).join("")).join("");
+           // add it to the DOM
+           root.innerHTML = ms;
+           // style it a bit
+           root.style.gridTemplate = `repeat(${data.length}, auto)/repeat(${data[0].length}, auto)`;
+
+        }
+
+        async function main() {
+            await init(); // init wasm module
+
+            render(startGame(18,18, 40));
+
+            // let make us of bubbling to catch clicks
+            const root = document.getElementById("root"); 
+            root.addEventListener("click", (e) => {
+                e.preventDefault();
+                const x = e.target.dataset.x;
+                const y = e.target.dataset.y;
+                console.log(`click ${x} ${y}`);
+                render(openField(x, y));
+            });
+
+            root.addEventListener("contextmenu", (e) => {
+                e.preventDefault();
+                const x = e.target.dataset.x;
+                const y = e.target.dataset.y;
+                console.log(`click ${x} ${y}`);
+                render(toggleFlag(x, y));
+            });
+        }
+
+        main();
+
+    </script>
+</body>
+</html>

@@ -24,7 +24,7 @@ impl Display for Minesweeper {
                 if self.flagged_fields.contains(&pos) {
                     f.write_str("🚩 ")?;
                 } else if !self.open_fields.contains(&pos) {
-                    f.write_str("🔳 ")?;
+                    f.write_str("🟪 ")?;
                 } else if self.mines.contains(&pos) {
                     f.write_str("💣 ")?;
                 } else {
