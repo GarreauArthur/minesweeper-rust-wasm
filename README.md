@@ -1,14 +1,14 @@
 # Minesweeper
 
-Let's try rust & webassembly by creating minesweeper.
-Let's see how they do it: <https://youtu.be/0ywizYLPV00>
+Let's try rust & webassembly by creating Minesweeper.
+Based on: <https://youtu.be/0ywizYLPV00>
 
 ## Prerequisites
 
 * rust & cargo
 * wasm-pack
 
-## process
+## Process
 
 1. Create a new rust lib (inside existing directory) with `cargo init --lib`
 2. Let's build the logic with rust first, without thinking about webassembly
@@ -17,7 +17,7 @@ Let's see how they do it: <https://youtu.be/0ywizYLPV00>
 
 ### Step 3: Link wasm module with javascript using wasm-bindgen
 
-Step 1: cargo add wasm-bindgen
+Step 1: `cargo add wasm-bindgen`
 
 Step 2: add to Cargo.toml file:
 
