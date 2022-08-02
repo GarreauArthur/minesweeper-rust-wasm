@@ -17,8 +17,8 @@ jobs:
       uses: jetli/wasm-pack-action@v0.3.0
     - name: compile wasm
       run: wasm-pack build --target web
-    - name: git add
-      run: git add ./pkg
+    - name: git checkout gh-pages && git add
+      run: git checkout gh-pages && git add ./pkg
     - name: Push to gh-pages
       uses: Automattic/action-commit-to-branch@master
       with:
