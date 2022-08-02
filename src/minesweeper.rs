@@ -14,6 +14,7 @@ pub struct Minesweeper {
     open_fields: HashSet<Position>,
     mines: HashSet<Position>,
     flagged_fields: HashSet<Position>,
+    lost: bool,
 }
 
 impl Display for Minesweeper {
@@ -21,10 +22,12 @@ impl Display for Minesweeper {
         for y in 0..self.height {
             for x in 0..self.width {
                 let pos = (x, y);
-                if self.flagged_fields.contains(&pos) {
+                if self.lost && self.mines.contains(&pos) {
+                    f.write_str("💣 ")?;
+                } else if self.flagged_fields.contains(&pos) {
                     f.write_str("🚩 ")?;
                 } else if !self.open_fields.contains(&pos) {
-                    f.write_str("🟪 ")?;
+                    f.write_str("⬜ ")?;
                 } else if self.mines.contains(&pos) {
                     f.write_str("💣 ")?;
                 } else {
@@ -70,6 +73,7 @@ impl Minesweeper {
             open_fields: HashSet::new(),
             mines: Minesweeper::create_mines(&mine_count, &width, &height),
             flagged_fields: HashSet::new(),
+            lost: false,
         }
     }
 
@@ -91,7 +95,7 @@ impl Minesweeper {
 
     /// When the user click a field, we check if it's a mine or an opened field
     pub fn open(&mut self, clicked_position: Position) -> Option<OpenResult> {
-        if self.flagged_fields.contains(&clicked_position) {
+        if self.lost || self.flagged_fields.contains(&clicked_position) {
             return None; 
         }
         if self.open_fields.contains(&clicked_position) {
@@ -99,6 +103,7 @@ impl Minesweeper {
         }
         self.open_fields.insert(clicked_position);
         if self.mines.contains(&clicked_position) {
+            self.lost = true;
             return Some(OpenResult::Mine);
         }
         let nb_mines = self.neighboring_mines(clicked_position);
@@ -113,7 +118,7 @@ impl Minesweeper {
 
     pub fn toggle_flag(&mut self, clicked_position: Position) {
 
-        if self.open_fields.contains(&clicked_position) {
+        if self.lost || self.open_fields.contains(&clicked_position) {
             return;
         }
 

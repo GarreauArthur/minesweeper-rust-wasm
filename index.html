@@ -8,6 +8,7 @@
     <style type="text/css">
         body {
             background: rgb(46, 46, 46);
+            color: white;
         }
         #root {
             display: inline-grid;
@@ -15,12 +16,18 @@
         }
         span {
             text-decoration: none;
-            color: white;
             text-align: center;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
+    <h1>Minesweeper</h1>
+    <div id="gameDifficulty">
+        <button>Easy</button>
+        <button>Medium</button>
+        <button>Hard</button>
+    </div>
     <div id="root"></div>
     <script type="module">
         import init, {startGame, openField, toggleFlag} from "./pkg/minesweeper.js";
@@ -42,7 +49,6 @@
         async function main() {
             await init(); // init wasm module
 
-            render(startGame(18,18, 40));
 
             // let make us of bubbling to catch clicks
             const root = document.getElementById("root"); 
@@ -50,7 +56,6 @@
                 e.preventDefault();
                 const x = e.target.dataset.x;
                 const y = e.target.dataset.y;
-                console.log(`click ${x} ${y}`);
                 render(openField(x, y));
             });
 
@@ -58,9 +63,20 @@
                 e.preventDefault();
                 const x = e.target.dataset.x;
                 const y = e.target.dataset.y;
-                console.log(`click ${x} ${y}`);
                 render(toggleFlag(x, y));
             });
+
+            document.getElementById("gameDifficulty").addEventListener("click", (e) => {
+                const difficulty = e.target.innerText;
+                if ( "Easy" === difficulty ) {
+                    render(startGame(10,10, 10));
+                } else if ( "Medium" === difficulty ) {
+                    render(startGame(18,18, 40));
+                } else if ( "Hard" === difficulty ) {
+                    render(startGame(24,24, 99));
+                }
+            });
+
         }
 
         main();
