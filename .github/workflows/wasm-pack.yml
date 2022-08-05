@@ -17,13 +17,13 @@ jobs:
       uses: jetli/wasm-pack-action@v0.3.0
     - name: compile wasm
       run: |
-        wasm-pack build --target web --out-dir build/pkg
-        cp index.html ./build
-        ls -al ./build
-        echo "are you ok? wtf are you doing? can you deploy this motherfucking directory or what ??"
-        echo "ffs, just fuck u"
-    - name: Deploy 🚀
-      uses: JamesIves/github-pages-deploy-action@v4
-      with:
-        branch: gh-pages # The branch the action should deploy to.
-        folder: build
+        rm -rf ./docs
+        wasm-pack build --target web --out-dir docs/pkg
+        cp index.html ./docs
+        git checkout -b built
+        git add .
+        git commit -m "built"
+        git push
+        git checkout gh-pages
+        git merge built
+        git push
