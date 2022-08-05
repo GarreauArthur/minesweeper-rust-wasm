@@ -16,17 +16,11 @@ jobs:
     - name: wasm-pack-action
       uses: jetli/wasm-pack-action@v0.3.0
     - name: compile wasm
-      run: wasm-pack build --target web
-    - uses: actions/upload-artifact@v3
+      run: |
+        wasm-pack build --target web --out-dir build/pkg
+        cp index.html ./build
+    - name: Deploy 🚀
+      uses: JamesIves/github-pages-deploy-action@v4
       with:
-        name: dist
-        path: |
-          pkg/
-          index.html
-    - uses: actions/download-artifact@v1
-      with:
-        name: dist
-    - uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: dist
+        branch: gh-pages # The branch the action should deploy to.
+        folder: build
