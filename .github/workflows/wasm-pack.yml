@@ -15,9 +15,15 @@ jobs:
       uses: jetli/wasm-pack-action@v0.3.0
     - name: compile wasm
       run: wasm-pack build --target web
-    - run: mkdir dist
-    - run: mv index.html dist/
-    - run: mv pkg dist/
+    - uses: actions/upload-artifact@v3
+      with:
+        name: dist
+        path: |
+          index.html
+          pkg/
+    - uses: actions/download-artifact@v1
+      with:
+        name: dist
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@v4
       with:
