@@ -20,8 +20,10 @@ jobs:
         git config --global user.email "action@github.com"
         git config --global user.name "github action"
         git fetch
-        rm -rf ./docs
         wasm-pack build --target web
+        cd pkg
+        rm .gitignore
+        cd ..
         git checkout -b built
         git add .
         git commit -m "built"
