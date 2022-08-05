@@ -17,6 +17,8 @@ jobs:
       uses: jetli/wasm-pack-action@v0.3.0
     - name: compile wasm
       run: |
+        git config --global user.email "action@github.com"
+        git config --global user.name "github action"
         rm -rf ./docs
         wasm-pack build --target web --out-dir docs/pkg
         cp index.html ./docs
