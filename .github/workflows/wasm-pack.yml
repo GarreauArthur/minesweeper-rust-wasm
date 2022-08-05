@@ -7,26 +7,18 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: wasm-pack-action
       uses: jetli/wasm-pack-action@v0.3.0
     - name: compile wasm
       run: wasm-pack build --target web
-    - uses: actions/upload-artifact@v3
+    - run: mkdir dist
+    - run: mv index.html dist/
+    - run: mv pkg dist/
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@v4
       with:
-        name: dist
-        path: |
-          index.html
-          pkg/
-    - uses: actions/download-artifact@v1
-      with:
-        name: dist
-    - uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: dist
+        folder: dist
