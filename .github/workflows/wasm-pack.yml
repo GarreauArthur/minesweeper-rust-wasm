@@ -23,7 +23,6 @@ jobs:
         git checkout -b built
         git add .
         git commit -m "built"
-        git push
         git checkout gh-pages
         git merge built
         git push
