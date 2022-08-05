@@ -19,6 +19,9 @@ jobs:
       run: |
         wasm-pack build --target web --out-dir build/pkg
         cp index.html ./build
+        ls -al ./build
+        echo "are you ok? wtf are you doing? can you deploy this motherfucking directory or what ??"
+        echo "ffs, just fuck u"
     - name: Deploy 🚀
       uses: JamesIves/github-pages-deploy-action@v4
       with:
